@@ -1,0 +1,18 @@
+drop database movies;
+create database movies;
+use movies;
+create table theatre(theatreId int auto_increment primary key,theatreName varchar(50),location varchar(50),seatingCapacity int,phoneNo varchar(11) unique,_3d enum('YES','NO'),iMax enum('YES','NO'),unique(theatreName,location));
+
+create table movie(movieId int auto_increment primary key,movieName varchar(80) unique,director varchar(50),hero varchar(50),heroine varchar(50),language varchar(50),releaseDate date,rating float);
+
+create table customer(customerId int auto_increment primary key,name varchar(50),phoneNo varchar(11) unique,email varchar(120) unique);
+
+create table shows(showId int auto_increment primary key,showName varchar(100) unique,movieId int,theatreId int,date date,showTime time,ticketCost double,seatsAvailable int,foreign key(movieId) references movie(movieId),foreign key(theatreId) references theatre(theatreId));
+
+create table customerBookings(bookId int auto_increment primary key,showId int,customerId int,noOfTickets int,foreign key(showId) references shows(showId),foreign key(customerId) references customer(customerId));
+
+
+
+
+ 
+select s.showId,c.customerName,m.movieName,t.theatreName,s.date,s.showTime,b.noOfTickets,b.noOfTickets * s.ticketCost from customer c inner join customerBookings b on c.customerId=b.customerId inner join shows s on b.showId=s.showId inner join theatre t on s.theatreId=t.theatreId and inner join movie m on s.movieId=m.movieId;
